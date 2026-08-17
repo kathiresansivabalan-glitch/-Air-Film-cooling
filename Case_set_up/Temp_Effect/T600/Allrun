@@ -1,0 +1,5 @@
+blockMesh
+decomposePar 
+mpirun -np 6 buoyantBoussinesqSimpleFoam -parallel 
+reconstructPar 
+

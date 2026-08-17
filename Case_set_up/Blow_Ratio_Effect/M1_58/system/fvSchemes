@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         steadyState;
+}
+
+gradSchemes
+{
+    //default         Gauss linear;
+	
+	default cellMDLimited Gauss linear 0.65;
+    grad(U) cellMDLimited Gauss linear 0.65;
+	grad(T) cellMDLimited Gauss linear 0.65;
+}
+
+divSchemes
+{
+   /* default         none;
+
+    div(phi,U)      bounded Gauss upwind;
+    div(phi,T)      bounded Gauss upwind;
+
+    turbulence      bounded Gauss upwind;
+    div(phi,k)      $turbulence;
+    div(phi,epsilon) $turbulence;
+
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+	*/
+	// More Accurate Schemes
+	
+	
+	div(phi,U) Gauss linearUpwind grad(U);
+    //div(phi,T) Gauss linearUpwind default;
+	div(phi,T) Gauss linearUpwind grad(T);  //improve accuracy for temperature
+    div(phi,k) Gauss linearUpwind default;
+	div(phi,epsilon) Gauss linearUpwind default;
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+}
+
+laplacianSchemes
+{
+    //default         Gauss linear corrected;
+	default Gauss linear limited 0.65;
+	
+}
+
+interpolationSchemes
+{
+    default       linear;
+}
+
+snGradSchemes
+{
+    //default         corrected;
+	default limited 0.65;
+}
+
+
+// ************************************************************************* //
